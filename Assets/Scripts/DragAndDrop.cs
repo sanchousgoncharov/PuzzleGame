@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,15 +18,21 @@ public class DragAndDrop : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            //В hit мы занесем результат выполнения команды Raycast
+            //там будет либо null, если raycast никого не задел, либо первый
+            //объект, стоящий на пути мышки (какой объект будет первым
+            //решает его положение Z в мировом пространстве)
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.transform.CompareTag("Puzzle"))
             {
+                Debug.Log($"{hit.transform.gameObject.name} {hit.transform.localPosition.z}");
                 if (!hit.transform.GetComponent<pieceScript>().inRightPosition)
                 {
                     selectedPiece = hit.transform.gameObject;
                     selectedPiece.GetComponent<pieceScript>().selected = true;
                     selectedPiece.GetComponent<SortingGroup>().sortingOrder = OIL;
                     OIL++;
+                    
                 } 
             }
         }
