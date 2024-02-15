@@ -12,7 +12,7 @@ public class pieceScript : MonoBehaviour
     void Start()
     {
         rightPosition = transform.position;
-        transform.position = new Vector3(Random.Range(1f,7f), Random.Range(-4f,4f), Random.Range(1f, 0f));
+        transform.position = new Vector3(Random.Range(1f,7f), Random.Range(-4f,4f), Random.Range(0.49f, 0f));
     }
 
     void Update()
@@ -26,6 +26,7 @@ public class pieceScript : MonoBehaviour
                     transform.position = rightPosition;
                     inRightPosition = true;
                     GetComponent<SortingGroup>().sortingOrder = 0;
+                    gameObject.GetComponent<BoxCollider2D>().enabled = false;
                 }
                 
             }

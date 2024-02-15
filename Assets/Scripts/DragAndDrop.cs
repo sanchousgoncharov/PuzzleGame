@@ -7,9 +7,11 @@ using UnityEngine.Rendering;
 public class DragAndDrop : MonoBehaviour
 {
     public GameObject selectedPiece;
+    float selectedPieceZ;
     int OIL = 1;
+    Vector3 offset;
 
-   void Start()
+    void Start()
     {
         
     }
@@ -25,15 +27,15 @@ public class DragAndDrop : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hit.transform.CompareTag("Puzzle"))
             {
-                Debug.Log($"{hit.transform.gameObject.name} {hit.transform.localPosition.z}");
+                //Debug.Log($"{hit.transform.gameObject.name} {hit.transform.localPosition.z}");
                 if (!hit.transform.GetComponent<pieceScript>().inRightPosition)
                 {
                     selectedPiece = hit.transform.gameObject;
                     selectedPiece.GetComponent<pieceScript>().selected = true;
                     selectedPiece.GetComponent<SortingGroup>().sortingOrder = OIL;
                     OIL++;
-                    
-                } 
+                    offset = selectedPiece.transform.position - Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+                }
             }
         }
 
@@ -44,13 +46,12 @@ public class DragAndDrop : MonoBehaviour
                 selectedPiece.GetComponent<pieceScript>().selected = false;
                 selectedPiece = null;
             }
-            
         }
 
         if (selectedPiece != null)
         {
-            Vector3 mousePoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            selectedPiece.transform.position = new Vector3(mousePoint.x, mousePoint.y, 0);
+            Vector3 newPosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0);
+            selectedPiece.transform.position = Camera.main.ScreenToWorldPoint(newPosition) + offset;
         }
     }
 }
